@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 
 function Navbar({ user, setUser }) {
   const navigate = useNavigate();
@@ -12,25 +12,47 @@ function Navbar({ user, setUser }) {
 
   return (
     <nav className="navbar">
-      <Link to="/" style={{ textDecoration: 'none', color: 'var(--primary)' }}>
-        <h1 style={{ margin: 0 }}>AirBnB Clone</h1>
-      </Link>
-      <div className="links" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-        <Link to="/">Explore</Link>
-        {user ? (
-          <>
-            <Link to="/favorites">Favorites</Link>
-            {user.role?.name === "Admin" && <Link to="/admin">Admin Panel</Link>}
-            <button onClick={handleLogout} className="btn-rent" style={{ width: 'auto', padding: '8px 15px' }}>
-                Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup" className="btn-primary" style={{ textDecoration: 'none' }}>Signup</Link>
-          </>
-        )}
+      <div className="container nav-content">
+        <Link to="/" className="nav-logo">
+          <span className="logo-icon">🏠</span>
+          <span className="logo-text">GlamJam</span>
+        </Link>
+
+        <div className="nav-links">
+          <NavLink to="/" end className={({ isActive }) => isActive ? "active-link" : ""}>
+            Explore
+          </NavLink>
+
+          {user ? (
+            <>
+              <NavLink to="/favorites" className={({ isActive }) => isActive ? "active-link" : ""}>
+                Favorites
+              </NavLink>
+              
+              <NavLink to="/my-bookings" className={({ isActive }) => isActive ? "active-link" : ""}>
+                My Trips
+              </NavLink>
+
+              {user.role?.name === "Admin" && (
+                <NavLink to="/admin" className="admin-badge">
+                  Admin Panel
+                </NavLink>
+              )}
+
+              <div className="user-menu">
+                <span className="username">Hi, {user.username}</span>
+                <button onClick={handleLogout} className="btn-logout">
+                  Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="auth-buttons">
+              <Link to="/login" className="login-link">Login</Link>
+              <Link to="/signup" className="btn-primary signup-btn">Signup</Link>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

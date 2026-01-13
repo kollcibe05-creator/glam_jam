@@ -1,45 +1,88 @@
-import React from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 
-function SignupForm({ setUser }) {
-    const navigate = useNavigate();
+function SearchFilters({ onFilterChange }) {
+  const [filters, setFilters] = useState({
+    location: '',
+    house_type: '',
+    min_rating: '',
+    max_price: '' // Added price support
+  });
 
-    const formik = useFormik({
-        initialValues: { username: '', email: '', password: '' },
-        validationSchema: yup.object().shape({
-            username: yup.string().required().min(3),
-            email: yup.string().email().required(),
-            password: yup.string().required().min(6),
-        }),
-        onSubmit: (values) => {
-            fetch("/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-            }).then((res) => {
-                if (res.ok) {
-                    res.json().then((user) => {
-                        setUser(user);
-                        navigate("/");
-                    });
-                }
-            });
-        },
-    });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
 
-    return (
-        <div className="form-box">
-            <h2>Create Account</h2>
-            <form onSubmit={formik.handleSubmit}>
-                <input name="username" placeholder="Username" onChange={formik.handleChange} value={formik.values.username} />
-                <input name="email" placeholder="Email" onChange={formik.handleChange} value={formik.values.email} />
-                <input name="password" type="password" placeholder="Password" onChange={formik.handleChange} value={formik.values.password} />
-                <button type="submit" className="btn-primary">Sign Up</button>
-            </form>
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Pass the clean filters object to HouseGallery
+    onFilterChange(filters);
+  };
+
+  const clearFilters = () => {
+    const reset = { location: '', house_type: '', min_rating: '', max_price: '' };
+    setFilters(reset);
+    onFilterChange(reset);
+  };
+
+  return (
+    <div className="search-bar-container">
+      <form onSubmit={handleSearch} className="filter-form">
+        <div className="filter-group">
+          <label>Where</label>
+          <input
+            name="location"
+            type="text"
+            placeholder="Search destinations"
+            value={filters.location}
+            onChange={handleChange}
+          />
         </div>
-    );
+
+        <div className="filter-group">
+          <label>Property Type</label>
+          <select name="house_type" value={filters.house_type} onChange={handleChange}>
+            <option value="">Any Type</option>
+            <option value="Villa">Villa</option>
+            <option value="Apartment">Apartment</option>
+            <option value="Cottage">Cottage</option>
+            <option value="Penthouse">Penthouse</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>Max Price</label>
+          <select name="max_price" value={filters.max_price} onChange={handleChange}>
+            <option value="">Any Price</option>
+            <option value="100">$100 or less</option>
+            <option value="250">$250 or less</option>
+            <option value="500">$500 or less</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>Rating</label>
+          <select name="min_rating" value={filters.min_rating} onChange={handleChange}>
+            <option value="">Any Rating</option>
+            <option value="4.5">Top Tier (4.5+)</option>
+            <option value="4">Great (4.0+)</option>
+            <option value="3">Good (3.0+)</option>
+          </select>
+        </div>
+
+        <div className="filter-actions">
+          <button type="submit" className="search-circle-btn">
+             🔍
+          </button>
+          {Object.values(filters).some(x => x !== '') && (
+            <button type="button" className="clear-link" onClick={clearFilters}>
+              Clear
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  );
 }
 
-export default SignupForm;
+export default SearchFilters;

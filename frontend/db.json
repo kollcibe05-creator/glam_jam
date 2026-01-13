@@ -1,0 +1,41 @@
+{
+  "houses": [
+    {
+      "id": 1,
+      "location": "Nairobi, Kenya",
+      "house_type": "Villa",
+      "price_per_night": 150,
+      "average_rating": 4.8,
+      "image_url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
+      "description": "A stunning luxury villa with views of the city skyline and a private pool.",
+      "reviews": [
+        { "id": 1, "rating": 5, "comment": "Absolutely incredible stay!", "user": { "username": "JohnDoe" } }
+      ]
+    },
+    {
+      "id": 2,
+      "location": "Diani, Kenya",
+      "house_type": "Cottage",
+      "price_per_night": 85,
+      "average_rating": 4.5,
+      "image_url": "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
+      "description": "Cozy beachfront cottage perfect for a weekend getaway.",
+      "reviews": []
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "house_id": 1,
+      "start_date": "2026-02-10",
+      "end_date": "2026-02-15",
+      "status": "Approved",
+      "house": { "location": "Nairobi, Kenya", "image_url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750" }
+    }
+  ],
+  "favorites": [],
+  "users": [
+    { "id": 1, "username": "admin", "role": { "name": "Admin" } },
+    { "id": 2, "username": "traveler", "role": { "name": "User" } }
+  ]
+}
